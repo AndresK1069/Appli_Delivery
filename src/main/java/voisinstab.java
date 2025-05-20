@@ -3,23 +3,24 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class voisinstab {
-    public static void main(String[] args) throws FileNotFoundException {
-        File tabDistance = new File("pokemon_appli_data/distances.txt");
-        try (Scanner scan = new Scanner(tabDistance)) {
-            ArrayList ligne = new ArrayList<String>();
+public class VoisinsTab{
+
+    public static ArrayList<ArrayList<String>> lireDistances(String cheminFichier) throws FileNotFoundException {
+        File fichier = new File(cheminFichier);
+        ArrayList<ArrayList<String>> tableau = new ArrayList<>();
+
+        try (Scanner scan = new Scanner(fichier)) {
             while (scan.hasNextLine()) {
-                ArrayList tmpArrayList = new ArrayList<String>();
-                String line = scan.nextLine();
-                String[] split = line.split(" ");
-                for (String i: split){
-                    tmpArrayList.add(i);
+                String ligne = scan.nextLine();
+                String[] elements = ligne.split(" ");
+                ArrayList<String> ligneListe = new ArrayList<>();
+                for (String element : elements) {
+                    ligneListe.add(element);
                 }
-                ligne.add(tmpArrayList);
+                tableau.add(ligneListe);
             }
-            System.out.println(ligne);
         }
-        
+
+        return tableau;
     }
-    
 }

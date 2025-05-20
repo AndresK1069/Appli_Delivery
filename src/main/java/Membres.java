@@ -5,16 +5,21 @@ import java.util.Hashtable;
 import java.util.Scanner;
 
 public class Membres {
-    public static void main(String[] args) throws FileNotFoundException {
-        File memeberliste = new File("pokemon_appli_data/membres_APPLI.txt");
-        try (Scanner scan = new Scanner(memeberliste)) {
-            Dictionary memberdic = new Hashtable();
+
+    public static Dictionary<String, String> lireMembres(String cheminFichier) throws FileNotFoundException {
+        File fichierMembres = new File(cheminFichier);
+        Dictionary<String, String> dictionnaireMembres = new Hashtable<>();
+
+        try (Scanner scan = new Scanner(fichierMembres)) {
             while (scan.hasNextLine()) {
-                String line = scan.nextLine();
-                String[] split = line.split(" ");
-                memberdic.put(split[0], split[1]);
+                String ligne = scan.nextLine();
+                String[] parties = ligne.split(" ");
+                if (parties.length >= 2) {
+                    dictionnaireMembres.put(parties[0], parties[1]);
+                }
             }
-            System.out.println(memberdic);
         }
+
+        return dictionnaireMembres;
     }
 }
