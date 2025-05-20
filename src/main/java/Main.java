@@ -9,9 +9,13 @@ public class Main {
        
         //Test methode lireMembres
         /* 
+        
         try {
-            Dictionary<String, String> membres = Membres.lireMembres("pokemon_appli_data/membres_APPLI.txt");
-            System.out.println(membres);
+            Map<String, String> membres = Membres.lireMembres("pokemon_appli_data/membres_APPLI.txt");
+            System.out.println(Membres.getCity("Kabutops"));
+            
+            
+
         } catch (FileNotFoundException e) {
             System.out.println("Fichier non trouvé.");
         }*/
@@ -28,14 +32,23 @@ public class Main {
         }*/
 
         //Test méthode lireScenario
+        
+        //TODO
+
         /* 
 
         try {
-            Map<String, String> scenario = ScenarioLoader.lireScenario("pokemon_appli_data/scenario_0.txt");
-            System.out.println(scenario);
+            Map<String, String> scenarioMap = ScenarioLoader.lireScenario("pokemon_appli_data/scenario_0.txt");
+            ArrayList<ArrayList<String>> scenarioList = scenarioMap.getScenario();
+            ArrayList<String> expediteurs = scenarioList.get(0);
+            ArrayList<String> destinataires = scenarioList.get(1);
+            System.out.println("Expéditeurs : " + expediteurs);
+            System.out.println("Destinataires : " + destinataires);
+
         } catch (Exception e) {
             System.out.println("Erreur : " + e.getMessage());
         }*/
+
 
 
           
