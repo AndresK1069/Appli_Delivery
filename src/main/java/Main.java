@@ -22,14 +22,14 @@ public class Main {
 
 
         //Test méthode lireDistances
-        /* 
+
 
         try {
             ArrayList<ArrayList<String>> distances = VoisinsTab.lireDistances("pokemon_appli_data/distances.txt");
-            System.out.println(distances);
+            System.out.println(VoisinsTab.getDistance("Brest","Clermond_Fd"));
         } catch (FileNotFoundException e) {
             System.out.println("Fichier non trouvé.");
-        }*/
+        }
 
         //Test méthode lireScenario
         
