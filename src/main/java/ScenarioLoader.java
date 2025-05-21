@@ -6,12 +6,18 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ScenarioLoader {
-    private static Map<String, String> ChScenarioMap;
+    private Map<String, String> ChScenarioMap;
 
-    public static Map<String, String> lireScenario(String cheminFichier) throws FileNotFoundException {
+    // Constructeur
+    public ScenarioLoader() {
+        ChScenarioMap = new LinkedHashMap<>();
+    }
+
+    public Map<String, String> lireScenario(String cheminFichier) throws FileNotFoundException {
         File fichier = new File(cheminFichier);
         try (Scanner scan = new Scanner(fichier)) {
-            ChScenarioMap = new LinkedHashMap<>();
+            // Si le dictionnaire est réutilisé, réinitialisez-le
+            ChScenarioMap.clear();
 
             while (scan.hasNextLine()) {
                 String ligne = scan.nextLine();
@@ -26,7 +32,7 @@ public class ScenarioLoader {
         }
     }
 
-    public static ArrayList getScenario(){
+    public ArrayList getScenario() {
         ArrayList expediteur = new ArrayList<>();
         ArrayList destinataire = new ArrayList<>();
         for (Map.Entry<String, String> entry : ChScenarioMap.entrySet()) {
@@ -35,16 +41,12 @@ public class ScenarioLoader {
 
             expediteur.add(key);
             destinataire.add(value);
-        
         }
+
         ArrayList<ArrayList<String>> result = new ArrayList<>();
         result.add(expediteur);
         result.add(destinataire);
 
         return result;
     }
-
-    
-
-  
 }

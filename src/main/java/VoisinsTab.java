@@ -5,13 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class VoisinsTab{
-    public static ArrayList<ArrayList<String>> ChTabAdjacent;
-    public static Map<String, Integer> ChIndexMap;
+public class VoisinsTab {
+    private ArrayList<ArrayList<String>> ChTabAdjacent;
+    private Map<String, Integer> ChIndexMap;
 
-    public static ArrayList<ArrayList<String>> lireDistances(String cheminFichier) throws FileNotFoundException {
+    // Constructeur
+    public VoisinsTab() {
+        this.ChTabAdjacent = new ArrayList<>();
+        this.ChIndexMap = new HashMap<>();
+    }
+
+    // Méthode pour lire les distances depuis un fichier
+    public ArrayList<ArrayList<String>> lireDistances(String cheminFichier) throws FileNotFoundException {
         File fichier = new File(cheminFichier);
-        ChTabAdjacent = new ArrayList<>();
 
         try (Scanner scan = new Scanner(fichier)) {
             while (scan.hasNextLine()) {
@@ -28,25 +34,30 @@ public class VoisinsTab{
         return ChTabAdjacent;
     }
 
-    public static Map<String, Integer> getIndexMap(){
-        ChIndexMap = new HashMap<>();
-        String key = new String();
+    // Méthode pour obtenir la carte des indices des villes
+    public Map<String, Integer> getIndexMap() {
+        ChIndexMap.clear();  // Réinitialiser la carte avant de la remplir
+        String key;
+
         for (int i = 0; i < ChTabAdjacent.size(); i++) {
-            for (int j = 0; j < ChTabAdjacent.get(i).size(); j++) {
-                key = String.valueOf(ChTabAdjacent.get(i).getFirst());
-            }
-            ChIndexMap.put(key, i+1);
+            // Assumons que chaque ligne dans ChTabAdjacent commence par le nom de la ville
+            key = ChTabAdjacent.get(i).get(0);  // Prendre le premier élément comme clé (ville)
+            ChIndexMap.put(key, i + 1);  // La clé est la ville, la valeur est son index (commence à 1)
         }
+
         return ChIndexMap;
     }
 
-
-    public static String getDistance(String City01, String City02){
+    // Méthode pour obtenir la distance entre deux villes
+    public String getDistance(String City01, String City02) {
+        // Créer la carte des indices des villes
         Map<String, Integer> tmp = getIndexMap();
-        String distance = ChTabAdjacent.get(tmp.get(City01)-1).get(tmp.get(City02)-1);
-        return distance;
 
+        // Récupérer l'index des villes et récupérer la distance depuis ChTabAdjacent
+        int indexCity01 = tmp.get(City01) - 1;
+        int indexCity02 = tmp.get(City02) - 1;
+
+        // Retourner la distance sous forme de String
+        return ChTabAdjacent.get(indexCity01).get(indexCity02);
     }
-
-
 }
