@@ -8,7 +8,7 @@ public class TriTopologique {
     private String ChVilleDArrive;
     public ArrayList<String> ChVilleViste;
     public VoisinsTab ChListeVille;
-    private VoisinsTab ChVilleDeDepart;
+    VoisinsTab ChVilleDeDepart;
     
     //TODO 
     private String ChVilleDeDepartTMP;
@@ -21,36 +21,6 @@ public class TriTopologique {
         
     }
 
-    public void setListeVille(VoisinsTab listeVille) {
-        this.ChListeVille = listeVille;
-    }
-
-    public void Explo() {
-        int lepluspetit = 9999;
-        String villeMin = null;
-
-        for (Entry<String, List<Integer>> entry : ChListeVille.getTabDistance().entrySet()) {
-            String key = entry.getKey();
-            List<Integer> value = entry.getValue();
-
-            if (ChVilleViste.contains(key)) {
-                continue;
-            }
-
-            for (Integer distance : value) {
-                if (distance < lepluspetit && distance != 0) {
-                    lepluspetit = distance;
-                    villeMin = key;
-                }
-            }
-        }
-
-        if (villeMin != null && !ChVilleViste.contains(villeMin)) {
-            ChVilleViste.add(villeMin);
-        }
-
-        System.out.println("Villes visitées : " + ChVilleViste);
-    }
 
     public void ExploV2(){
         int setupValue = 9999;
@@ -60,6 +30,9 @@ public class TriTopologique {
 
         List<Integer> distances = ChVilleDeDepart.getTabDistance().get("Velizy");
         Map<String, Integer> indexMAP = ChVilleDeDepart.getIndexMap();
+
+        ChVilleViste.add("Velizy");
+
 
 
 
@@ -75,10 +48,6 @@ public class TriTopologique {
                 idk = entry.getKey();  // Found the city name
                 ChVilleViste.add(idk);
             }
-        
-
-            System.out.println(ChVilleViste);
-
 
     }   
 
