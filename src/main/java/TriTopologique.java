@@ -25,6 +25,7 @@ public class TriTopologique {
     public void ExploV2(){
         int setupValue = 9999;
         int indexV2 = 0;
+        int DistanceKilometre = 0;
         String idk = null; //nom de la Prochaine Ville
         ArrayList<String> villevue;
 
@@ -33,14 +34,12 @@ public class TriTopologique {
 
         ChVilleViste.add("Velizy");
 
-
-
-
         for (int i=0 ; i < distances.size(); i++){
             if (distances.get(i) < setupValue &&  distances.get(i) != 0){
                 setupValue = distances.get(i);
                 indexV2 = i;
             }
+            DistanceKilometre = DistanceKilometre + distances.get(i); //Finish Distance Calculation
         }
 
         for (Map.Entry<String, Integer> entry : indexMAP.entrySet()) {
