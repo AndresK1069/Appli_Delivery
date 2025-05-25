@@ -1,63 +1,65 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class VoisinsTab {
-    private ArrayList<ArrayList<String>> ChTabAdjacent;
+    private Map<String, List<Integer>> ChTabAdjacent;
     private Map<String, Integer> ChIndexMap;
 
-    // Constructeur
+
     public VoisinsTab() {
-        this.ChTabAdjacent = new ArrayList<>();
+        this.ChTabAdjacent = new LinkedHashMap<>();
         this.ChIndexMap = new HashMap<>();
     }
 
-    // Méthode pour lire les distances depuis un fichier
-    public ArrayList<ArrayList<String>> lireDistances(String cheminFichier) throws FileNotFoundException {
+    // Lire les distances et remplir le dictionnaire
+    public Map<String, List<Integer>> lireDistances(String cheminFichier) {
+        ChTabAdjacent.clear();
         File fichier = new File(cheminFichier);
 
         try (Scanner scan = new Scanner(fichier)) {
             while (scan.hasNextLine()) {
-                String ligne = scan.nextLine();
-                String[] elements = ligne.split(" ");
-                ArrayList<String> ligneListe = new ArrayList<>();
-                for (String element : elements) {
-                    ligneListe.add(element);
+                String ligne = scan.nextLine().trim();
+                if (!ligne.isEmpty()) {
+                    String[] elements = ligne.split("\\s+");
+                    String ville = elements[0];
+                    List<Integer> distances = new ArrayList<>();
+                    for (int i = 1; i < elements.length; i++) {
+                        distances.add(Integer.parseInt(elements[i]));
+                    }
+                    ChTabAdjacent.put(ville, distances);
                 }
-                ChTabAdjacent.add(ligneListe);
             }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
 
         return ChTabAdjacent;
     }
 
-    // Méthode pour obtenir la carte des indices des villes
+    public Map<String, List<Integer>> getTabDistance(){
+        return ChTabAdjacent;
+    }
+
+    // Carte des indices des villes
     public Map<String, Integer> getIndexMap() {
-        ChIndexMap.clear();  // Réinitialiser la carte avant de la remplir
-        String key;
-
-        for (int i = 0; i < ChTabAdjacent.size(); i++) {
-            // Assumons que chaque ligne dans ChTabAdjacent commence par le nom de la ville
-            key = ChTabAdjacent.get(i).get(0);  // Prendre le premier élément comme clé (ville)
-            ChIndexMap.put(key, i + 1);  // La clé est la ville, la valeur est son index (commence à 1)
+        ChIndexMap.clear();
+        int index = 0;
+        for (String ville : ChTabAdjacent.keySet()) {
+            ChIndexMap.put(ville, index++);
         }
-
         return ChIndexMap;
     }
 
-    // Méthode pour obtenir la distance entre deux villes
-    public String getDistance(String City01, String City02) {
-        // Créer la carte des indices des villes
-        Map<String, Integer> tmp = getIndexMap();
+    // Obtenir la distance entre deux villes
+    public int getDistance(String ville1, String ville2) {
+    
+        if (ChIndexMap.isEmpty()) {
+            getIndexMap();
+        }
 
-        // Récupérer l'index des villes et récupérer la distance depuis ChTabAdjacent
-        int indexCity01 = tmp.get(City01) - 1;
-        int indexCity02 = tmp.get(City02) - 1;
-
-        // Retourner la distance sous forme de String
-        return ChTabAdjacent.get(indexCity01).get(indexCity02);
+        int index2 = ChIndexMap.get(ville2);
+        return ChTabAdjacent.get(ville1).get(index2);
     }
+
+    
 }
