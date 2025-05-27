@@ -1,7 +1,7 @@
 import java.io.FileNotFoundException;
 
 public static void main(String[] args) throws FileNotFoundException {
-        TriTopologique topo = new TriTopologique();
+        Algo_0_LePlusProche topo = new Algo_0_LePlusProche();
         topo.LePlusProche();
 
 }

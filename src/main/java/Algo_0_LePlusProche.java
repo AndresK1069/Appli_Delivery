@@ -1,15 +1,14 @@
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.Map.Entry;
 
-public class TriTopologique {
+public class Algo_0_LePlusProche {
 
     private String ChVilleDArrive;
     public ArrayList<String> ChVilleViste;
     public VoisinsTab ChListeVille;
     VoisinsTab ChVilleDeDepart;
 
-    public TriTopologique() {
+    public Algo_0_LePlusProche() {
         this.ChVilleViste = new ArrayList<>();
         this.ChListeVille = null; // à définir depuis l'extérieur via setListeVille
         // this.ChVilleDeDepart.getIndexMap().get(ChListeVille);
@@ -139,8 +138,7 @@ public class TriTopologique {
             VoyageFinael.add(entry.getKey());
         }
 
-        System.out.println("Chemin:"+VoyageFinael + " " +DistanceKilometre + " Kilometre");
+        System.out.println("Chemin:"+VoyageFinael + " " + DistanceKilometre + " Kilometre");
     }
-
 
 }
