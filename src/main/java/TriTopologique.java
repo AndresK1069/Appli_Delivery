@@ -61,7 +61,7 @@ public static void main(String[] args) throws FileNotFoundException {
 
         // Load le Scenario
         ScenarioLoader loader = new ScenarioLoader();
-        Map<String, String> scenarioMap = loader.lireScenario("pokemon_appli_data/scenario_5.txt");
+        Map<String, String> scenarioMap = loader.lireScenario("pokemon_appli_data/scenario_0.txt");
         ArrayList<ArrayList<String>> scenarioList = loader.getScenario();
         ArrayList<String> expediteurs = scenarioList.get(0);
         ArrayList<String> destinataires = scenarioList.get(1);
@@ -118,9 +118,13 @@ public static void main(String[] args) throws FileNotFoundException {
         // Trier du plus grand au plus petit
         villesEtDistances.sort(Comparator.comparingInt(Map.Entry::getValue));
 
+        ArrayList<String> VoyageFinael = new ArrayList<>();
+        int DistanceKilometre = 0;
+
         // Afficher les résultats triés
         for (Map.Entry<String, Integer> entry : villesEtDistances) {
-            System.out.println("Ville : " + entry.getKey() + ", Distance : " + entry.getValue());
+            DistanceKilometre = DistanceKilometre + entry.getValue();
+            VoyageFinael.add(entry.getKey());
         }
 
         // algo pour le retour
@@ -172,8 +176,11 @@ public static void main(String[] args) throws FileNotFoundException {
 
         // Affichage des résultats
         for (Map.Entry<String, Integer> entry : villesEtDistancesRetour) {
-            System.out.println("Ville : " + entry.getKey() + ", Distance : " + entry.getValue());
+            DistanceKilometre = DistanceKilometre + entry.getValue();
+            VoyageFinael.add(entry.getKey());
         }
+
+        System.out.println("Chemin:"+VoyageFinael + " " +DistanceKilometre + " Kilometre");
     }
 
 
