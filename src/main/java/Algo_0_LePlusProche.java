@@ -17,6 +17,8 @@ public class Algo_0_LePlusProche {
 
     public void LePlusProche() throws FileNotFoundException {
 
+        //TODO add compareto between city pour avoir la distance correct
+
         // Load le Scenario
         ScenarioLoader loader = new ScenarioLoader();
         Map<String, String> scenarioMap = loader.lireScenario("pokemon_appli_data/scenario_0.txt");
