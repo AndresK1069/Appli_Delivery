@@ -2,65 +2,68 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Algo_0_LePlusProche {
+    private VoisinsTab ChTabDistance; // Objet contenant les distances entre villes
+    private String ChSource; // Ville de départ
+    private Membres ChListeMembre; // Objet contenant les membres (avec leurs villes)
+    private ScenarioLoader ChScenarioLoader; // Objet permettant de charger un scénario
 
-    private String ChVilleDArrive;
-    public ArrayList<String> ChVilleViste;
-    public VoisinsTab ChListeVille;
-    VoisinsTab ChVilleDeDepart;
+    public Algo_0_LePlusProche(String source, String PathForMember, String PathForDistances, String PathForScenario) throws FileNotFoundException {
 
-    public Algo_0_LePlusProche() {
-        this.ChVilleViste = new ArrayList<>();
-        this.ChListeVille = null; // à définir depuis l'extérieur via setListeVille
-        // this.ChVilleDeDepart.getIndexMap().get(ChListeVille);
+        // Input pour la source du graph
+        this.ChSource = source;
+
+        // Chargement des données membres
+        this.ChListeMembre = new Membres();
+        this.ChListeMembre.lireMembres(PathForMember);
+
+        // Chargement des distances entre les villes
+        this.ChTabDistance = new VoisinsTab();
+        this.ChTabDistance.lireDistances(PathForDistances);
+
+        // Chargement du scénario à exécuter
+        this.ChScenarioLoader = new ScenarioLoader();
+        this.ChScenarioLoader.lireScenario(PathForScenario);
     }
 
-
     public void LePlusProche() throws FileNotFoundException {
-
-        // Load le Scenario
-        ScenarioLoader loader = new ScenarioLoader();
-        Map<String, String> scenarioMap = loader.lireScenario("pokemon_appli_data/scenario_0.txt");
-        ArrayList<ArrayList<String>> scenarioList = loader.getScenario();
+        // Récupération des listes d'expéditeurs et de destinataires
+        ArrayList<ArrayList<String>> scenarioList = ChScenarioLoader.getScenario();
         ArrayList<String> expediteurs = scenarioList.get(0);
         ArrayList<String> destinataires = scenarioList.get(1);
 
-        //load les membre
-        Membres test = new Membres();
-        test.lireMembres("pokemon_appli_data/membres_APPLI.txt");
+        // Listes des villes des expéditeurs et des destinataires
+        ArrayList<String> VilleEXp = new ArrayList<String>();
+        ArrayList<String> VilleDE = new ArrayList<String>();
 
-        ArrayList VilleEXp = new ArrayList();
-        ArrayList VilleDE = new ArrayList();
-
-        for(int i=0; i<expediteurs.size(); i++){
-            VilleEXp.add(test.getCity(expediteurs.get(i)));
+        // Conversion des noms d'expéditeurs en villes
+        for (String expediteur : expediteurs) {
+            VilleEXp.add(ChListeMembre.getCity(expediteur));
         }
 
-        for(int i=0; i<destinataires.size(); i++){
-            VilleDE.add(test.getCity(destinataires.get(i)));
-        }
-        VilleEXp.add("Velizy");
-        VilleDE.add("Velizy");
-
-        VoisinsTab voisins = new VoisinsTab();
-
-        // Lire les distances (les erreurs sont gérées dans la méthode)
-        voisins.lireDistances("pokemon_appli_data\\distances.txt");
-
-        List<Integer> distances = voisins.getTabDistance().get("Velizy");
-        Map<String, Integer> indexMAP = voisins.getIndexMap();
-
-        ArrayList testindex = new ArrayList();
-
-        for( int i=0; i<VilleEXp.size(); i++){
-            testindex.add(indexMAP.get(VilleEXp.get(i)));
+        // Conversion des noms de destinataires en villes
+        for (String destinataire : destinataires) {
+            VilleDE.add(ChListeMembre.getCity(destinataire));
         }
 
+        // Ajout de la ville source dans les deux listes
+        VilleEXp.add(ChSource);
+        VilleDE.add(ChSource);
 
+        // Récupère la liste des distances à partir de la ville source
+        List<Integer> distances = ChTabDistance.getTabDistance().get(ChSource);
+        Map<String, Integer> indexMAP = ChTabDistance.getIndexMap();
 
-        final List<Integer> listWithoutDuplicates = new ArrayList<>(new LinkedHashSet<>(testindex));
+        // Conversion des villes en index dans le tableau des distances
+        ArrayList<Integer> testindex = new ArrayList<Integer>();
+        for (String s : VilleEXp) {
+            testindex.add(indexMAP.get(s));
+        }
 
+        // Suppression des doublons tout en conservant l'ordre
+        final List<Integer> listWithoutDuplicates = new ArrayList<>(new LinkedHashSet<Integer>(testindex));
+
+        // Création de la liste des villes avec leur distance depuis la source
         List<Map.Entry<String, Integer>> villesEtDistances = new ArrayList<>();
-
         for (Integer index : listWithoutDuplicates) {
             for (Map.Entry<String, Integer> entry : indexMAP.entrySet()) {
                 if (entry.getValue().equals(index)) {
@@ -73,31 +76,26 @@ public class Algo_0_LePlusProche {
             }
         }
 
-        // Trier du plus grand au plus petit
+        // Tri des villes par distance croissante à partir de la source
         villesEtDistances.sort(Comparator.comparingInt(Map.Entry::getValue));
 
-        ArrayList<String> VoyageFinael = new ArrayList<>();
-
-        // Afficher les résultats triés
+        // Construction de l'itinéraire aller
+        ArrayList<String> VoyageFinale = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : villesEtDistances) {
-            VoyageFinael.add(entry.getKey());
+            VoyageFinale.add(entry.getKey());
         }
 
-        // algo pour le retour
-        List<Integer> distancesBack = voisins.getTabDistance().get(villesEtDistances.get(villesEtDistances.size()-1).getKey());
-        ArrayList testindex2 = new ArrayList();
-
-        for( int i=0; i<VilleDE.size(); i++){
-            testindex2.add(indexMAP.get(VilleDE.get(i)));
+        // Préparation du calcul du chemin retour
+        List<Integer> distancesBack = ChTabDistance.getTabDistance().get(villesEtDistances.getLast().getKey());
+        ArrayList<Integer> testindex2 = new ArrayList<Integer>();
+        for (String s : VilleDE) {
+            testindex2.add(indexMAP.get(s));
         }
-
 
         final List<Integer> listWithoutDuplicates2 = new ArrayList<>(new LinkedHashSet<>(testindex2));
 
-
-        // Associer les distances retour et les noms de villes
+        // Construction de la liste des villes pour le retour avec leurs distances
         List<Map.Entry<String, Integer>> villesEtDistancesRetour = new ArrayList<>();
-
         for (Integer index : listWithoutDuplicates2) {
             for (Map.Entry<String, Integer> entry : indexMAP.entrySet()) {
                 if (entry.getValue().equals(index)) {
@@ -110,47 +108,43 @@ public class Algo_0_LePlusProche {
             }
         }
 
-        // Retirer Velizy si présente
+        // Retirer Velizy temporairement pour bien gérer son positionnement final
         Map.Entry<String, Integer> velizyEntry = null;
         Iterator<Map.Entry<String, Integer>> it = villesEtDistancesRetour.iterator();
         while (it.hasNext()) {
             Map.Entry<String, Integer> entry = it.next();
-            if (entry.getKey().equals("Velizy")) {
+            if (entry.getKey().equals(ChSource)) {
                 velizyEntry = entry;
                 it.remove();
                 break;
             }
         }
 
-        // Trier du plus petit au plus grand
+        // Tri du chemin retour par distance croissante
         villesEtDistancesRetour.sort(Comparator.comparingInt(Map.Entry::getValue));
 
-        // Ajouter Velizy à la fin
+        // Réintégrer Velizy à la fin du trajet
         if (velizyEntry != null) {
             villesEtDistancesRetour.add(velizyEntry);
         }
 
-        // Affichage des résultats
+        // Ajout du chemin retour dans l'itinéraire final
         for (Map.Entry<String, Integer> entry : villesEtDistancesRetour) {
-            VoyageFinael.add(entry.getKey());
+            VoyageFinale.add(entry.getKey());
         }
 
-        //Calcule des distance
+        // Calcul total de la distance parcourue
         int DistanceKilometre = 0;
-
-        for (int i = 0; i < VoyageFinael.size(); i++) {
-            if (i == VoyageFinael.size()-1) {
+        for (int i = 0; i < VoyageFinale.size(); i++) {
+            if (i == VoyageFinale.size() - 1) {
                 break;
             }
-
-            String Ville1 = VoyageFinael.get(i);
-            String Ville2 = VoyageFinael.get(i+1);
-
-            DistanceKilometre= DistanceKilometre + voisins.getDistance(Ville1, Ville2);
-
+            String Ville1 = VoyageFinale.get(i);
+            String Ville2 = VoyageFinale.get(i + 1);
+            DistanceKilometre = DistanceKilometre + ChTabDistance.getDistance(Ville1, Ville2);
         }
 
-        System.out.println("Chemin:"+VoyageFinael + " " + DistanceKilometre + " Kilometre");
+        // Affichage final du chemin et de la distance totale
+        System.out.println("Chemin:" + VoyageFinale + " " + DistanceKilometre + " Kilometre");
     }
-
 }
