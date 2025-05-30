@@ -61,5 +61,29 @@ public class VoisinsTab {
         return ChTabAdjacent.get(ville1).get(index2);
     }
 
-    
+    public ArrayList<String> getVilles() {
+        ArrayList<String> villes = new ArrayList<>();
+        for (String ville : ChTabAdjacent.keySet()) {
+            villes.add(ville);
+        }
+        return villes;
+    }
+
+    public Map<Integer, String> getReverseIndexMap() {
+        Map<Integer, String> reverseMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : ChIndexMap.entrySet()) {
+            reverseMap.put(entry.getValue(), entry.getKey());
+        }
+        return reverseMap;
+    }
+
+    public String getKeyByValue(Map<String, Integer> map, Integer value) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
 }

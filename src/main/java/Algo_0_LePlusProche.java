@@ -17,8 +17,6 @@ public class Algo_0_LePlusProche {
 
     public void LePlusProche() throws FileNotFoundException {
 
-        //TODO add compareto between city pour avoir la distance correct
-
         // Load le Scenario
         ScenarioLoader loader = new ScenarioLoader();
         Map<String, String> scenarioMap = loader.lireScenario("pokemon_appli_data/scenario_0.txt");
@@ -79,11 +77,9 @@ public class Algo_0_LePlusProche {
         villesEtDistances.sort(Comparator.comparingInt(Map.Entry::getValue));
 
         ArrayList<String> VoyageFinael = new ArrayList<>();
-        int DistanceKilometre = 0;
 
         // Afficher les résultats triés
         for (Map.Entry<String, Integer> entry : villesEtDistances) {
-            DistanceKilometre = DistanceKilometre + entry.getValue();
             VoyageFinael.add(entry.getKey());
         }
 
@@ -136,8 +132,22 @@ public class Algo_0_LePlusProche {
 
         // Affichage des résultats
         for (Map.Entry<String, Integer> entry : villesEtDistancesRetour) {
-            DistanceKilometre = DistanceKilometre + entry.getValue();
             VoyageFinael.add(entry.getKey());
+        }
+
+        //Calcule des distance
+        int DistanceKilometre = 0;
+
+        for (int i = 0; i < VoyageFinael.size(); i++) {
+            if (i == VoyageFinael.size()-1) {
+                break;
+            }
+
+            String Ville1 = VoyageFinael.get(i);
+            String Ville2 = VoyageFinael.get(i+1);
+
+            DistanceKilometre= DistanceKilometre + voisins.getDistance(Ville1, Ville2);
+
         }
 
         System.out.println("Chemin:"+VoyageFinael + " " + DistanceKilometre + " Kilometre");

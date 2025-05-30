@@ -4,6 +4,7 @@ public class ClientVoisinsTab {
 
         // Lire les distances (les erreurs sont gérées dans la méthode)
         voisins.lireDistances("pokemon_appli_data\\distances.txt");
+        System.out.println(voisins.getVilles());
 
         try {
             int distance = voisins.getDistance("Bordeaux", "Lille");
